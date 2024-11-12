@@ -7,6 +7,8 @@ import {
 } from './jsonExtraction'
 import path from 'path'
 
+const LIMIT_TABLE_NAME_LENGTH = 150
+
 async function getPngsFromPdfPage(stream: Buffer) {
   const pages = await pdf(stream, {
     scale: 2,
@@ -117,7 +119,10 @@ export async function extractTablesFromJson(
             pageWidth,
             pageHeight
           )*/
-          const name = table.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()
+          const name = table.name
+            .replace(/[^a-z0-9]/gi, '_')
+            .toLowerCase()
+            .slice(0, LIMIT_TABLE_NAME_LENGTH)
           const pngName = `table-${pageIndex}-${name}.png`
           const filename = path.join(outputDir, pngName)
 
