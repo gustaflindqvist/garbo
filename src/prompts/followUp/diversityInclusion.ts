@@ -5,6 +5,7 @@ export const schema = z.object({
         summary: z.string(),
         metrics: z.array(
           z.object({
+            year: z.number(),
             metric: z.string(),
             value: z.number(),
           })
@@ -26,21 +27,22 @@ export const prompt = `
 {
     "diversityAndInclusion": [
         {
-            "summary": "Brief description of the company's diversity and inclusion efforts",
+            "summary": "ABB description of the company's diversity and inclusion efforts",
             "metrics": [
                 {
-                "year": 2021,
-                "description": "Andel kvinnliga anställda",
-                "value": 50
+                    "year": 2021,
+                    "description": "Andel kvinnliga anställda",
+                    "value": 50
                 },
                 {
-                "year": 2021,
-                "metric": "Antal kvinnor i ledande positioner",
-                "value": 10
+                    "year": 2021,
+                    "metric": "Antal kvinnor i ledande positioner",
+                    "value": 10
                 },
                 {
-                "metric": "Annat relevant mått på mångfald",
-                "value": 10
+                    "year": 2021,
+                    "metric": "Annat relevant mått på mångfald",
+                    "value": 10
                 }
             ]
         }

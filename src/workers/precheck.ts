@@ -2,6 +2,7 @@ import { FlowProducer } from 'bullmq'
 import redis from '../config/redis'
 import wikidata from '../prompts/wikidata'
 import fiscalYear from '../prompts/followUp/fiscalYear'
+import diversityInclusion from '../prompts/followUp/diversityInclusion'
 import { askPrompt } from '../lib/openai'
 import { zodResponseFormat } from 'openai/helpers/zod'
 import { DiscordJob, DiscordWorker } from '../lib/DiscordWorker'
@@ -49,6 +50,15 @@ const precheck = new DiscordWorker('precheck', async (job: JobData) => {
         data: {
           ...base.data,
           schema: zodResponseFormat(wikidata.schema, 'wikidata'),
+        },
+      },
+      {
+        ...base,
+        name: 'diversityInclusion ' + companyName,
+        data: {
+          ...base.data,
+          prompt: diversityInclusion.prompt,
+          schema: zodResponseFormat(diversityInclusion.schema, 'diversityInclusion'),
         },
       },
       {
