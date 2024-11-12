@@ -287,6 +287,17 @@ model Employees {
   metadata Metadata @relation(fields: [metadataId], references: [id])
 }
 
+model DiversityInclusion {
+  id                Int     @id @default(autoincrement())
+  description       String
+  year              String?
+  companyId         String
+  metadataId        Int
+  reportingPeriodId Int?
+
+  metadata        Metadata         @relation(fields: [metadataId], references: [id])
+}
+
 model Goal {
   id                Int     @id @default(autoincrement())
   description       String
@@ -338,7 +349,7 @@ model Metadata {
   /// Where the data originated from, e.g. manual entry, AI extraction or estimated with a tool like Exiobase.
   /// Value is a string enum with vlaues like `garbo`, `manual`, `estimated:exiobase`
   dataOrigin String?
-
+  diversityInclusion   DiversityInclusion[]
   goal                 Goal[]
   initiative           Initiative[]
   scope1               Scope1[]
