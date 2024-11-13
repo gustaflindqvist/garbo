@@ -292,6 +292,7 @@ model DiversityInclusion {
   id                Int     @id @default(autoincrement())
   description       String
   year              String?
+  value             Float?
   companyId         String
   metadataId        Int
   reportingPeriodId Int?
