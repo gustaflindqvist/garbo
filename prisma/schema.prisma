@@ -34,7 +34,7 @@ model Company {
   goals            Goal[]
   initiatives      Initiative[]
   baseYears        BaseYear[]
-
+  diversityInclusions DiversityInclusion[]
   /// A comment only visible for reviewers to help them work with the company data and remember important info about this company.
   internalComment String?
 }
@@ -99,6 +99,7 @@ model ReportingPeriod {
 
   initiatives Initiative[]
   goals       Goal[]
+  diversityInclusions DiversityInclusion[]
   metadata    Metadata     @relation(fields: [metadataId], references: [id])
   economy     Economy?     @relation(fields: [economyId], references: [id])
   emissions   Emissions?   @relation(fields: [emissionsId], references: [id])
@@ -296,6 +297,8 @@ model DiversityInclusion {
   reportingPeriodId Int?
 
   metadata        Metadata         @relation(fields: [metadataId], references: [id])
+  company         Company          @relation(fields: [companyId], references: [wikidataId])
+  reportingPeriod ReportingPeriod? @relation(fields: [reportingPeriodId], references: [id])
 }
 
 model Goal {
