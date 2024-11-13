@@ -15,6 +15,8 @@ import {
   updateGoal,
   createInitiatives,
   updateInitiative,
+  createDiversityInclusions,
+  updateDiversityInclusion,
   createIndustry,
   updateIndustry,
 } from '../lib/prisma'
@@ -144,6 +146,59 @@ router.patch(
         error.code === 'P2025'
       ) {
         throw new GarboAPIError('Goal not found', {
+          statusCode: 404,
+          original: error,
+        })
+      }
+      throw error
+    })
+    res.json({ ok: true })
+  }
+)
+
+const diversityInclusionSchema = z.object({
+  description: z.string(),
+  year: z.string().optional(),
+  value: z.number().optional(),
+})
+
+router.post(
+  '/:wikidataId/diverstityInclusions',
+  processRequest({
+    body: z.object({
+      diversityInclusions: z.array(diversityInclusionSchema),
+    }),
+    params: wikidataIdParamSchema,
+  }),
+  async (req, res) => {
+    const { diversityInclusions } = req.body
+
+    if (diversityInclusions?.length) {
+      const { wikidataId } = req.params
+      const metadata = res.locals.metadata
+
+      await createDiversityInclusions(wikidataId, diversityInclusions, metadata)
+    }
+    res.json({ ok: true })
+  }
+)
+
+router.patch(
+  '/:wikidataId/diversityInclusions/:id',
+  processRequest({
+    body: z.object({ diversityInclusion: diversityInclusionSchema }),
+    params: z.object({ id: z.coerce.number() }),
+  }),
+  async (req, res) => {
+    const { diversityInclusion } = req.body
+    const { id } = req.params
+    const metadata = res.locals.metadata
+    await updateDiversityInclusion(id, diversityInclusion, metadata).catch((error) => {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2025'
+      ) {
+        throw new GarboAPIError('Diversity and Inclusion not found', {
           statusCode: 404,
           original: error,
         })

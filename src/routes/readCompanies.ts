@@ -168,6 +168,17 @@ router.get(
               year: 'desc',
             },
           },
+          diversityInclusions: {
+            select: {
+              description: true,
+              year: true,
+              value: true,
+              metadata,
+            },
+            orderBy: {
+              year: 'desc',
+            },
+          },
         },
       })
       res.json(
@@ -380,6 +391,17 @@ router.get(
               description: true,
               year: true,
               scope: true,
+              metadata,
+            },
+            orderBy: {
+              year: 'desc',
+            },
+          },
+          diversityInclusions: {
+            select: {
+              description: true,
+              year: true,
+              value: true,
               metadata,
             },
             orderBy: {

@@ -13,6 +13,7 @@ import {
   Turnover,
   Goal,
   Initiative,
+  DiversityInclusion,
   Industry,
 } from '@prisma/client'
 import { OptionalNullable } from './type-utils'
@@ -414,6 +415,59 @@ export async function updateInitiative(
     where: { id },
     data: {
       ...initiative,
+      metadata: {
+        connect: {
+          id: metadata.id,
+        },
+      },
+    },
+    select: { id: true },
+  })
+}
+
+export async function createDiversityInclusions(
+  wikidataId: Company['wikidataId'],
+  diversityInclusions: OptionalNullable<
+    Omit<DiversityInclusion, 'metadataId' | 'reportingPeriodId' | 'companyId' | 'id'>
+  >[],
+  metadata: Metadata
+) {
+  return prisma.$transaction(
+    diversityInclusions.map((diversityInclusion) =>
+      prisma.diversityInclusion.create({
+        data: {
+          ...diversityInclusion,
+          year: diversityInclusion.year,
+          description: diversityInclusion.description,
+          value: diversityInclusion.value,
+          company: {
+            connect: {
+              wikidataId,
+            },
+          },
+          metadata: {
+            connect: {
+              id: metadata.id,
+            },
+          },
+        },
+        select: { id: true },
+      })
+    )
+  )
+}
+
+export async function updateDiversityInclusion(
+  id: DiversityInclusion['id'],
+  diversityInclusion: OptionalNullable<
+    Omit<DiversityInclusion, 'metadataId' | 'reportingPeriodId' | 'companyId' | 'id'>
+  >,
+  metadata: Metadata
+) {
+  return prisma.diversityInclusion.update({
+    where: { id },
+    data: {
+      ...diversityInclusion,
       metadata: {
         connect: {
           id: metadata.id,

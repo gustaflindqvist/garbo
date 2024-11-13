@@ -240,6 +240,20 @@ export async function importGarboData({
               },
             }
           : undefined,
+          diversityInclusions: Array.isArray(company.diversityInclusions)
+          ? {
+              createMany: {
+                data: company.diversityInclusions.map(
+                  (diversityInclusion: (typeof company.diversityInclusions)[number]) => ({
+                    description: diversityInclusion.description,
+                    year: diversityInclusion.year?.toString() || null,
+                    value: diversityInclusion.value || null,
+                    metadataId: metadata.id,
+                  })
+                ),
+              },
+            }
+          : undefined,
 
         reportingPeriods:
           company.baseFacts || company.emissions
