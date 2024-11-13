@@ -51,6 +51,11 @@ export type CompanyData = {
     target: number
     unit: string
   }>
+  diversityInclusion?: Array<{
+    year: number
+    description: string
+    value: number
+  }>
   initiatives?: Array<{
     year: number
     description: string
